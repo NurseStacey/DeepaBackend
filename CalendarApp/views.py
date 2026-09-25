@@ -26,7 +26,7 @@ class CalendarEntry(APIView):
     def get(self, request, *args, **kwargs):
         these_ids=[]
         try:
-            not_repeting_records = CalendarEntryModel.objects.exclude(type='Repeating')
+            not_repeting_records = CalendarEntryModel.objects.all()
             these_ids = [one_record.id for one_record in not_repeting_records]
 
             serializer=CalendarEntryModelSerializer(CalendarEntryModel.objects.filter(id__in=these_ids), many=True)
@@ -39,7 +39,9 @@ class CalendarEntryCurrentRepeating(APIView):
         try:
 
             this_record= CalendarEntryModel.objects.filter(type='Repeating').order_by('-start_date').first()
-
+            if (this_record==None):
+                return Response({'title':'$$$$'}, status =status.HTTP_200_OK)            
+            
             serializer=RepeatingCalendarEntryModelSerializer(this_record, many=False)
             return Response(serializer.data, status =status.HTTP_200_OK)        
         except:
