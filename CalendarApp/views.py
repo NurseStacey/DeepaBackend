@@ -94,6 +94,7 @@ class GetCalendarDays(APIView):
             if len(other_repeating_records)>0:
                 if this_day==other_repeating_records[0].start_date:
                     this_repeating_record=other_repeating_records[0]
+                    theses_days_of_week=this_repeating_record.get_which_days_list()
 
             new_day={
                 'day':this_day.day,
