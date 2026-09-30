@@ -57,6 +57,7 @@ class CalendarEntryDelete(APIView):
 
 class GetCalendarDays(APIView):
     def get(self, request, month, year, *args, **kwargs):
+        month=month+1  #react they start at zero
         these_days=[]
         first_day_of_month = datetime.date(year,month,1)
         last_day_of_month=None
@@ -68,8 +69,6 @@ class GetCalendarDays(APIView):
             last_day_of_month=datetime.date(year,month,31)
 
         these_one_time_records = CalendarEntryModel.objects.exclude(type='Repeating')
-        print(first_day_of_month)
-
 
         this_repeating_record  = CalendarEntryModel.objects.filter(
             type='Repeating').filter(
@@ -80,7 +79,9 @@ class GetCalendarDays(APIView):
                         'start_date')
 
         this_day=first_day_of_month
-        theses_days_of_week=this_repeating_record.get_which_days_list()
+        theses_days_of_week=[]
+        if not this_repeating_record==None:
+            theses_days_of_week= this_repeating_record.get_which_days_list()
         days_of_week=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 
         for one_day in range(first_day_of_month.weekday()+1):
