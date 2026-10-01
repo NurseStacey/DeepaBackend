@@ -17,7 +17,7 @@ class CalendarEntryModel(models.Model):
         return_values=[]
         for index in range(6,-1,-1):
 
-            if which_days>(2**index):
+            if which_days>=(2**index):
                 return_values.insert(0,days_of_week[index])
                 which_days-=(2**index)
 

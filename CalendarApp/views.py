@@ -75,7 +75,10 @@ class GetCalendarDays(APIView):
                 start_date__lte=first_day_of_month).order_by(
                     '-start_date').first()
                 
-        other_repeating_records = CalendarEntryModel.objects.filter(start_date__month=month, start_date__year=year).filter(type='Repeating').order_by(
+        other_repeating_records = CalendarEntryModel.objects.filter(
+            start_date__month=month, start_date__year=year).filter(
+                type='Repeating').exclude(
+                    id=this_repeating_record.id).order_by(
                         'start_date')
 
         this_day=first_day_of_month
